@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h1>ユーザーデータをテーブル表示する</h1>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>mail</th>
+          <th>tel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user._id">
+          <td>{{ user.name }}</td>
+          <td>{{ user.mail }}</td>
+          <td>{{ user.tel }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      users: []
+    };
+  },
+  mounted() {
+    axios.get('/api/users').then(res => {
+      this.users = res.data;
+    });
+  }
+};
+</script>
