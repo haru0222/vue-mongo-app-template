@@ -4,41 +4,37 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const User = require('./models/User');
+const history = require('connect-history-api-fallback'); // ★追加
 
+const User = require('./models/User');
 const app = express();
 const PORT = 30112;
 
-// ✅ CORSとJSONボディパーサー
+// ミドルウェア
 app.use(cors());
 app.use(express.json());
+app.use(history()); // ★追加：Vueのhistoryモードと相性◎
 
-// ✅ MongoDB接続
+// 静的ファイル配信（history()の後）
+const distPath = path.join(__dirname, '../frontend/dist');
+app.use(express.static(distPath));
+
+// MongoDB接続
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB 接続成功！"))
   .catch((err) => console.error("❌ MongoDB 接続失敗:", err));
 
-// ✅ APIルート（例：/api/users）
+// APIルート
 app.get('/api/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
   } catch (err) {
-    console.error('❌ ユーザー取得失敗:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'サーバーエラー' });
   }
 });
 
-// ✅ ビルドされたVueを静的配信
-const distPath = path.join(__dirname, '../frontend/dist');
-app.use(express.static(distPath));
-
-// ✅ その他のリクエストにindex.htmlを返す（Vue Router 対応）
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
-});
-
-// ✅ サーバー起動
+// サーバー起動
 app.listen(PORT, () => {
-  console.log(`🚀 サーバー起動 http://localhost:${PORT}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
 });
