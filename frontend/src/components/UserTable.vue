@@ -30,7 +30,7 @@ export default {
     };
   },
 mounted() {
-  axios.get('http://153.120.121.157:30112/api/users')
+  axios.get('/api/users')
     .then(res => {
       console.log('取得したユーザーデータ:', res.data)
       this.users = res.data;
