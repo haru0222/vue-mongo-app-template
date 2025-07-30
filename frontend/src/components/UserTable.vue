@@ -29,11 +29,15 @@ export default {
       users: []
     };
   },
-  mounted() {
-    axios.get('/api/users').then(res => {
-      console.log('取得したユーザーデータ:', res.data);
+mounted() {
+  axios.get('http://153.120.121.157:3000/api/users')
+    .then(res => {
+      console.log('取得したユーザーデータ:', res.data)
       this.users = res.data;
+    })
+    .catch(err => {
+      console.error('ユーザーデータの取得に失敗:', err);
     });
-  }
+}
 };
 </script>
