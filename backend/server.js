@@ -25,7 +25,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // ここで dist を公開
-const distPath = path.join(__dirname, '../frontend/dist');
+const distPath = path.resolve(__dirname, '../frontend/dist');
 app.use(express.static(distPath));
 
 // ルートアクセス時は index.html を返す
