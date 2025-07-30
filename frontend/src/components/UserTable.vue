@@ -31,6 +31,7 @@ export default {
   },
   mounted() {
     axios.get('/api/users').then(res => {
+      console.log('取得したユーザーデータ:', res.data);
       this.users = res.data;
     });
   }
